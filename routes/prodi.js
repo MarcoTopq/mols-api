@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var dateFormat = require('dateformat');
-var Kelas = require('../models/kelas');
+var Prodi = require('../models/prodi');
 var Joi = require('joi');
 var multer = require('multer');
 const storage = multer.diskStorage({
@@ -56,10 +56,10 @@ router.post('/create', async (req, res) => {
         console.log(req.body);
         console.log(req.file)
         try {
-            var data = await Kelas.create({
-                id_matkul: body.id_matkul,
-                id_dosen: body.id_dosen,
-                id_mahasiswa: body.id_mahasiswa,
+            var data = await Prodi.create({
+                prodi: body.prodi,
+                kode: body.kode,
+                fak_id: body.fak_id,
                 created_at: dateFormat(new Date(), "yyyy-mm-dd h:MM:ss"),
                 updated_at: dateFormat(new Date(), "yyyy-mm-dd h:MM:ss")
             })
@@ -71,21 +71,21 @@ router.post('/create', async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
-    await Kelas.findAll()
+    await Prodi.findAll()
         .then(data => (res.json(data)))
         .catch(err => res.status(400).json(err))
 });
 
 router.get('/:id', async (req, res) => {
     var Id = req.params.id;
-    await Kelas.findOne({
+    await Prodi.findOne({
             where: {
                 id: Id
             }
         })
         .then(data => {
             if (!data) {
-                return res.json("Kelas not found");
+                return res.json("Prodi not found");
             } else {
                 return res.json(data);
             }
@@ -96,19 +96,19 @@ router.get('/:id', async (req, res) => {
 router.post('/:id', async (req, res) => {
     var Id = req.params.id;
     var body = req.body;
-    await Kelas.findOne({
+    await Prodi.findOne({
             where: {
                 id: Id
             }
         })
         .then(data => {
             if (!data) {
-                return res.json("Kelas not found");
+                return res.json("Prodi not found");
             } else {
-                Kelas.update({
-                    id_matkul: body.id_matkul,
-                    id_dosen: body.id_dosen,
-                    id_mahasiswa: body.id_mahasiswa,
+                Prodi.update({
+                    prodi: body.prodi,
+                    kode: body.kode,
+                    fak_id: body.fak_id,
                     update_at: dateFormat(new Date(), "yyyy-mm-dd h:MM:ss")
                 }, {
                     where: {
@@ -123,19 +123,19 @@ router.post('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
     var Id = req.params.id;
-    await Kelas.update({
+    await Prodi.update({
         isDelete: true
     }, {
         where: {
             id: Id
         }
     })
-    await Kelas.destroy({
+    await Prodi.destroy({
             where: {
                 id: Id
             }
         })
-        .then(res.json("Kelas was remove"))
+        .then(res.json("Prodi was remove"))
         .catch(err => res.status(400).json(err))
 });
 

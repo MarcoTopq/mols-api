@@ -38,13 +38,8 @@ router.post('/signup', async (req, res) => {
       } else {
         Dosen.create({
             nip: body.nip,
-            nama: body.nama,
-            telepon: body.telepon,
-            alamat: body.alamat,
-            foto: body.foto,
-            email: body.email,
-            password: bcrypt.hashSync(body.password, 10),
-            role: body.role
+            fakultas: body.fakultas,
+            user_id: body.user_id,
           })
           .then(data => (res.json(data)))
       }
@@ -55,7 +50,7 @@ router.post('/signup', async (req, res) => {
 router.post('/signin', async (req, res) => {
   await Dosen.findOne({
     where: {
-      nip: req.body.nip 
+      nip: req.body.nip
     }
   }).then((dosen) => {
     const checkLogin = bcrypt.compareSync(req.body.password, dosen.password);
@@ -99,13 +94,8 @@ router.post('/edit/:id', async (req, res) => {
     } else {
       var update = await Dosen.update({
         nip: body.nip,
-        nama: body.nama,
-        telepon: body.telepon,
-        alamat: body.alamat,
-        foto: body.foto,
-        email: body.email,
-        password: bcrypt.hashSync(body.password, 10),
-        role: body.role
+        fakultas: body.fakultas,
+        user_id: body.user_id,
       }, {
         where: {
           id: Id

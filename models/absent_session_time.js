@@ -1,7 +1,7 @@
 'use strict'
 const Sequelize = require('sequelize');
 const db = require('../bin/index')
-const Absent = db.define('absent', {
+const Absent_session_time = db.define('absent_session_time', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -24,6 +24,6 @@ const Absent = db.define('absent', {
     timestamps: false,
 });
 
-Absent.sync();
+Absent_session_time.sync();
 
-module.exports = Absent;
+module.exports = Absent_session_time;

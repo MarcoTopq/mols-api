@@ -11,7 +11,7 @@ var Joi = require('joi');
 var bodySchema = {
   body: {
     Mahasiswaname: Joi.string().required(),
-    email: Joi.string().required(),
+    fakultas: Joi.string().required(),
     phone: Joi.string().required(),
     password: Joi.string().required(),
   }
@@ -20,7 +20,7 @@ var bodySchema = {
 var updateSchema = {
   body: {
     Mahasiswaname: Joi.string().allow(""),
-    email: Joi.string().allow(""),
+    fakultas: Joi.string().allow(""),
     phone: Joi.string().allow(""),
     password: Joi.string().allow(""),
   }
@@ -30,21 +30,19 @@ router.post('/signup', async (req, res) => {
   var body = req.body;
   await Mahasiswa.findOne({
       where: {
-        email: body.email
+        nim: body.nim
       }
     }).then(current_Mahasiswa => {
       if (current_Mahasiswa) {
-        return res.json("email has been used");
+        return res.json("fakultas has been used");
       } else {
         Mahasiswa.create({
             nim: body.nim,
-            nama: body.nama,
-            telepon: body.telepon,
-            alamat: body.alamat,
-            foto: body.foto,
-            email: body.email,
-            password: bcrypt.hashSync(body.password, 10),
-            role: body.role
+            user_id: body.user_id,
+            prodi: body.prodi,
+            angkatan: body.angkatan,
+            kelas: body.kelas,
+            fakultas: body.fakultas,
           })
           .then(data => (res.json(data)))
       }
@@ -99,13 +97,11 @@ router.post('/edit/:id', async (req, res) => {
     } else {
        await Mahasiswa.update({
         nim: body.nim,
-        nama: body.nama,
-        telepon: body.telepon,
-        alamat: body.alamat,
-        foto: body.foto,
-        email: body.email,
-        password: bcrypt.hashSync(body.password, 10),
-        role: body.role
+        user_id: body.user_id,
+        prodi: body.prodi,
+        angkatan: body.angkatan,
+        kelas: body.kelas,
+        fakultas: body.fakultas,
       }, {
         where: {
           id: Id

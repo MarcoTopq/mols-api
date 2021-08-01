@@ -13,7 +13,7 @@ const Mahasiswa = db.define('mahasiswa', {
     // unique: true,
   },
   user_id: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.BIGINT,
     // primaryKey: true,
     // autoIncrement: true,
   },

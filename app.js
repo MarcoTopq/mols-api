@@ -41,7 +41,7 @@ app.use('/matkul', matkulRouter);
 app.use('/nilai', nilaiRouter);
 app.use('/kelas', kelasRouter);
 app.use('/post', postRouter);
-app.use('/reply', replyRouter);
+// app.use('/reply', replyRouter);
 app.use('/dosen', dosenRouter);
 app.use('/mahasiswa', mahasiswaRouter);
 app.use('/admin', adminRouter);
