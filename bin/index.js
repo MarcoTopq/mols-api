@@ -20,7 +20,7 @@ const redis = require('redis');
 var db = new Sequelize({
   database: 'ealerning', 
   username: 'root', 
-  // password: 'mentulan',
+  // password: 'MOLS',
   password: '',
   host: 'localhost',
   port: 3306,
