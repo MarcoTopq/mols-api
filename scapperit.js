@@ -1,8 +1,8 @@
 var scrapeIt = require("scrape-it")
 const fs = require('fs');
 
-scrapeIt("https://genshin.gg/characters/Ayaka", {
-    title: "h2",
+scrapeIt("https://mangakita.net/daftar-manga/?list", {
+    title: "ul li a.series",
     // desc: ".header h2",
     // avatar: {
     //     selector: "img.table-image",
