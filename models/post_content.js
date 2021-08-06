@@ -1,7 +1,7 @@
 'use strict'
 const Sequelize = require('sequelize');
 const db = require('../bin/index')
-const Post_content = db.define('post_content', {
+const Post_content = db.define('post_contents', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,

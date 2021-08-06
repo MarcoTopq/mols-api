@@ -2,7 +2,7 @@
 const Sequelize = require('sequelize');
 const db = require('../bin/index');
 var bcrypt = require('bcrypt');
-const Dosen = db.define('dosen', {
+const Dosen = db.define('dosens', {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,

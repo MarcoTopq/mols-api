@@ -1,7 +1,7 @@
 'use strict'
 const Sequelize = require('sequelize');
 const db = require('../bin/index')
-const Angkatan = db.define('angkatan', {
+const Angkatan = db.define('angkatans', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,

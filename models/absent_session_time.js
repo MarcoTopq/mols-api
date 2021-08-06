@@ -1,7 +1,7 @@
 'use strict'
 const Sequelize = require('sequelize');
 const db = require('../bin/index')
-const Absent_session_time = db.define('absent_session_time', {
+const Absent_session_time = db.define('absent_session_times', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
