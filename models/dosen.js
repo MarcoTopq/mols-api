@@ -18,9 +18,8 @@ const Dosen = db.define('dosens', {
   user_id: {
     type: Sequelize.BIGINT,
   },
-  createdAt: Sequelize.DATE,
-  updatedAt: Sequelize.DATE,
-  isDeleted: Sequelize.TINYINT,
+  created_at: Sequelize.DATE,
+  updated_at: Sequelize.DATE,
 });
 
 Dosen.sync();

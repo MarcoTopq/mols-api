@@ -29,8 +29,8 @@ const Mahasiswa = db.define('mahasiswas', {
   fakultas: {
     type: Sequelize.STRING,
   },
-  createdAt: Sequelize.DATE,
-  updatedAt: Sequelize.DATE,
+  created_at: Sequelize.DATE,
+  updated_at: Sequelize.DATE,
   // isDeleted: Sequelize.TINYINT,
 });
 
