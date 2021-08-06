@@ -14,7 +14,16 @@ var matkulRouter = require('./routes/matkul');
 var postRouter = require('./routes/post');
 var nilaiRouter = require('./routes/nilai');
 
-var replyRouter = require('./routes/reply');
+var absent_session_timeRouter = require('./routes/absent_session_time');
+var absentRouter = require('./routes/absent');
+var angkatanRouter = require('./routes/angkatan');
+var fakultasRouter = require('./routes/fakultas');
+var groupRouter = require('./routes/group');
+var jawaban_mahasiswaRouter = require('./routes/jawaban_mahasiswa');
+var post_contentRouter = require('./routes/post_content');
+var prodiRouter = require('./routes/prodi');
+var soalRouter = require('./routes/soal');
+var tahunRouter = require('./routes/tahun');
 
 var cors = require('cors');
 var app = express();
@@ -41,10 +50,19 @@ app.use('/matkul', matkulRouter);
 app.use('/nilai', nilaiRouter);
 app.use('/kelas', kelasRouter);
 app.use('/post', postRouter);
-// app.use('/reply', replyRouter);
 app.use('/dosen', dosenRouter);
 app.use('/mahasiswa', mahasiswaRouter);
 app.use('/admin', adminRouter);
+app.use('/absentsessiontime', absent_session_timeRouter);
+app.use('/absent', absentRouter);
+app.use('/angkatan', angkatanRouter);
+app.use('/fakultas', fakultasRouter);
+app.use('/group', groupRouter);
+app.use('/jawabanmahasiswa', jawaban_mahasiswaRouter);
+app.use('/postcontent', post_contentRouter);
+app.use('/prodi', prodiRouter);
+app.use('/soal', soalRouter);
+app.use('/tahun', tahunRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
