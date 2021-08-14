@@ -84,7 +84,7 @@ router.get('/all/:id', async (req, res) => {
                 user_id: Id
             }
         })
-        .then(data => {
+        .then( async data  => {
             if (!data) {
                 return res.json("Grup Participants not found");
             } else {
