@@ -1,7 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var dateFormat = require('dateformat');
+var GrupParticipants = require('../models/group_participants');
 var Grup = require('../models/group');
+
 var Joi = require('joi');
 var multer = require('multer');
 const storage = multer.diskStorage({
@@ -56,19 +58,11 @@ router.post('/create', async (req, res) => {
         console.log(req.body);
         console.log(req.file)
         try {
-            var data = await Grup.create({
-                name: body.name,
+            var data = await GrupParticipants.create({
                 user_id: body.user_id,
-                kode: body.kode,
-                description: body.description,
-                slug: body.slug,
+                group_id: body.group_id,
                 status: body.status,
-                access: body.access,
-                year: body.year,
-                type: body.type,
-                prodi_id: body.prodi_id,
                 created_at: dateFormat(new Date(), "yyyy-mm-dd h:MM:ss"),
-                updated_at: dateFormat(new Date(), "yyyy-mm-dd h:MM:ss")
             })
             res.json(data)
         } catch (error) {
@@ -78,39 +72,50 @@ router.post('/create', async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
-    await Grup.findAll()
+    await GrupParticipants.findAll()
         .then(data => (res.json(data)))
         .catch(err => res.status(400).json(err))
 });
 
 router.get('/all/:id', async (req, res) => {
     var Id = req.params.id;
-    await Grup.findAll({
+    await GrupParticipants.findAll({
             where: {
-                id: Id
+                user_id: Id
             }
         })
         .then(data => {
             if (!data) {
-                return res.json("Group not found");
+                return res.json("Grup Participants not found");
             } else {
-                return res.json(data);
+                var datas = await Promise.all(data.map(async fc => {
+                    const objFc = JSON.parse(JSON.stringify(fc));
+                    let query = {
+                        where: {
+                            id: fc.group_id,
+                            status: 'active'
+                        },
+                    };
+                    objFc.group = await Grup.findOne(query);
+
+                    return objFc;
+                }))
+                return res.json(datas);
             }
         })
         .catch(err => res.status(400).json(err))
 });
 
-
 router.get('/:id', async (req, res) => {
     var Id = req.params.id;
-    await Grup.findOne({
+    await GrupParticipants.findOne({
             where: {
                 id: Id
             }
         })
         .then(data => {
             if (!data) {
-                return res.json("Grup not found");
+                return res.json("Grup Participants not found");
             } else {
                 return res.json(data);
             }
@@ -121,26 +126,19 @@ router.get('/:id', async (req, res) => {
 router.post('/:id', async (req, res) => {
     var Id = req.params.id;
     var body = req.body;
-    await Grup.findOne({
+    await GrupParticipants.findOne({
             where: {
                 id: Id
             }
         })
         .then(data => {
             if (!data) {
-                return res.json("Grup not found");
+                return res.json("Grup Participants not found");
             } else {
-                Grup.update({
-                    name: body.name,
+                GrupParticipants.update({
                     user_id: body.user_id,
-                    kode: body.kode,
-                    description: body.description,
-                    slug: body.slug,
+                    group_id: body.group_id,
                     status: body.status,
-                    access: body.access,
-                    year: body.year,
-                    type: body.type,
-                    prodi_id: body.prodi_id,
                     update_at: dateFormat(new Date(), "yyyy-mm-dd h:MM:ss")
                 }, {
                     where: {
@@ -155,19 +153,19 @@ router.post('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
     var Id = req.params.id;
-    await Grup.update({
+    await GrupParticipants.update({
         isDelete: true
     }, {
         where: {
             id: Id
         }
     })
-    await Grup.destroy({
+    await GrupParticipants.destroy({
             where: {
                 id: Id
             }
         })
-        .then(res.json("Grup was remove"))
+        .then(res.json("Grup Participants was remove"))
         .catch(err => res.status(400).json(err))
 });
 
