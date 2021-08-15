@@ -112,7 +112,7 @@ router.get('/', async (req, res) => {
 router.get('/all/:id', async (req, res) => {
     return new Promise(async (resolve, reject) => {
             var Id = req.params.id;
-            var grup = await Grup.findAll({
+            await Grup.findAll({
                 where: {
                     id: Id
                 }
@@ -122,7 +122,7 @@ router.get('/all/:id', async (req, res) => {
                         data: "Post not found"
                     });
                 } else {
-                    var datas = await Promise.all(grup.map(async fc => {
+                    var datas = await Promise.all(data.map(async fc => {
                         const objFc = JSON.parse(JSON.stringify(fc));
                         objFc.post = await Post.findAll({
                             where: {
