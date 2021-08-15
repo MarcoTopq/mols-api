@@ -132,18 +132,19 @@ router.get('/alltugas/:id', async (req, res) => {
                                 },
                             };
                             objFc.group = await Grup.findOne(query);
-                            objFc.post = await Promise.all(objFc.group.map(async fc => {
-                                const obj = JSON.parse(JSON.stringify(fc));
-                                obj.post = await Post.findAll({
-                                    where: {
-                                        group_id: fc.id
-                                    }
-                                });
-                                return obj;
-                            }))
                             return objFc;
                         }))
-                        return res.json(datas);
+
+                        var post = await Promise.all(datas.group.map(async fc => {
+                            const obj = JSON.parse(JSON.stringify(fc));
+                            obj.post = await Post.findAll({
+                                where: {
+                                    group_id: fc.id
+                                }
+                            });
+                            return obj;
+                        }))
+                        return res.json(post);
                     }
                 })
             // await Grup.findAll({
