@@ -109,7 +109,71 @@ router.get('/', async (req, res) => {
         .catch(err => res.status(400).json(err))
 });
 
-router.get('/all/:id', async (req, res) => {
+router.get('/alltugas/:id', async (req, res) => {
+    return new Promise(async (resolve, reject) => {
+            var Id = req.params.id;
+
+            await GrupParticipants.findAll({
+                    where: {
+                        user_id: Id
+                    }
+                })
+                .then(async data => {
+                    if (!data) {
+                        return res.json("Grup Participants not found");
+                    } else {
+                        var datas = await Promise.all(data.map(async fc => {
+                            const objFc = JSON.parse(JSON.stringify(fc));
+                            let query = {
+                                where: {
+                                    id: fc.group_id,
+                                    status: 'active'
+                                },
+                            };
+                            objFc.group = await Grup.findOne(query);
+                            objFc.post = await Promise.all(objFc.group.map(async fc => {
+                                const obj = JSON.parse(JSON.stringify(fc));
+                                obj.post = await Post.findAll({
+                                    where: {
+                                        group_id: fc.id
+                                    }
+                                });
+                                return obj;
+                            }))
+                            return objFc;
+                        }))
+                        return res.json(datas);
+                    }
+                })
+            // await Grup.findAll({
+            //     where: {
+            //         id: Id
+            //     }
+            // }).then(async data => {
+            //     if (!data) {
+            //         return res.json({
+            //             data: "Post not found"
+            //         });
+            //     } else {
+            //         var datas = await Promise.all(data.map(async fc => {
+            //             const objFc = JSON.parse(JSON.stringify(fc));
+            //             objFc.post = await Post.findAll({
+            //                 where: {
+            //                     group_id: fc.id
+            //                 }
+            //             });
+            //             return objFc;
+            //         }))
+            //         return res.json(datas);
+            //     }
+            // })
+        })
+        .catch(err => res.status(400).json(err))
+});
+
+
+//get semua tugas sesuai kelas
+router.get('/tugaskelas/:id', async (req, res) => {
     return new Promise(async (resolve, reject) => {
             var Id = req.params.id;
             await Grup.findAll({

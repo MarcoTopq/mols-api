@@ -77,6 +77,7 @@ router.get('/', async (req, res) => {
         .catch(err => res.status(400).json(err))
 });
 
+//get semua kelas
 router.get('/all/:id', async (req, res) => {
     var Id = req.params.id;
     await GrupParticipants.findAll({
