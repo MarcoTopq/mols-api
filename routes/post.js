@@ -116,7 +116,7 @@ router.get('/all/:id', async (req, res) => {
                 where: {
                     id: Id
                 }
-            }).then(data => {
+            }).then(async data => {
                 if (!data) {
                     return res.json({
                         data: "Post not found"
