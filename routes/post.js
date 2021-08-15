@@ -8,6 +8,8 @@ var config = require('../config/index');
 var auth = require('../middleware/auth');
 var expressJoi = require('express-joi-validator');
 var Joi = require('joi');
+var Grup = require('../models/group');
+
 var multer = require('multer');
 var path = require('path');
 const storage = multer.diskStorage({
@@ -62,9 +64,11 @@ router.post('/image', upload.single('photos'), async (req, res) => {
         var body = req.body;
         console.log(req.body);
         console.log(req.file)
-        try {   
-            
-            res.json({image : file.filename})
+        try {
+
+            res.json({
+                image: file.filename
+            })
         } catch (error) {
             res.json(error)
         }
@@ -79,7 +83,7 @@ router.post('/create', async (req, res) => {
         var body = req.body;
         console.log(req.body);
         console.log(req.file)
-        try {   
+        try {
             var post = await Post.create({
                 nama: body.nama,
                 keterangan: body.keterangan,
@@ -102,6 +106,35 @@ router.post('/create', async (req, res) => {
 router.get('/', async (req, res) => {
     await Post.findAll()
         .then(data => (res.json(data)))
+        .catch(err => res.status(400).json(err))
+});
+
+router.get('/all/:id', async (req, res) => {
+    return new Promise(async (resolve, reject) => {
+            var Id = req.params.id;
+            var grup = await Grup.findAll({
+                where: {
+                    id: Id
+                }
+            }).then(data => {
+                if (!data) {
+                    return res.json({
+                        data: "Post not found"
+                    });
+                } else {
+                    var datas = await Promise.all(grup.map(async fc => {
+                        const objFc = JSON.parse(JSON.stringify(fc));
+                        objFc.post = await Post.findAll({
+                            where: {
+                                group_id: fc.id
+                            }
+                        });
+                        return objFc;
+                    }))
+                    return res.json(datas);
+                }
+            })
+        })
         .catch(err => res.status(400).json(err))
 });
 
@@ -154,7 +187,7 @@ router.post('/:id', async (req, res) => {
         .catch(err => res.status(400).json(err))
 })
 
-router.delete('/:id',  async (req, res) => {
+router.delete('/:id', async (req, res) => {
     var Id = req.params.id;
     await Post.update({
         isDelete: true
