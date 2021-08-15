@@ -9,6 +9,7 @@ var auth = require('../middleware/auth');
 var expressJoi = require('express-joi-validator');
 var Joi = require('joi');
 var Grup = require('../models/group');
+var GrupParticipants = require('../models/group_participants');
 
 var multer = require('multer');
 var path = require('path');
