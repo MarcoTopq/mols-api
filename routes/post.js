@@ -110,6 +110,7 @@ router.get('/', async (req, res) => {
         .catch(err => res.status(400).json(err))
 });
 
+//get semua post sesuai nim
 router.get('/alltugas/:id', async (req, res) => {
     return new Promise(async (resolve, reject) => {
             var Id = req.params.id;

@@ -3,6 +3,8 @@ var router = express.Router();
 var dateFormat = require('dateformat');
 var Soal = require('../models/soal');
 var Joi = require('joi');
+var Post_content = require('../models/post_content');
+
 var multer = require('multer');
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -79,7 +81,7 @@ router.get('/', async (req, res) => {
         .catch(err => res.status(400).json(err))
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/soalid/:id', async (req, res) => {
     var Id = req.params.id;
     await Soal.findOne({
             where: {
@@ -95,6 +97,48 @@ router.get('/:id', async (req, res) => {
         })
         .catch(err => res.status(400).json(err))
 });
+
+//get soal sesuai post 
+router.get('/:id', async (req, res) => {
+    return new Promise(async (resolve, reject) => {
+            var Id = req.params.id;
+            await Post_content.findOne({
+                where: {
+                    id: Id
+                }
+            }).then(async data => {
+                if (!data) {
+                    return res.json({
+                        data: "Post not found"
+                    });
+                } else {
+                    var soal = await Soal.findOne({
+                        where: {
+                            id: data.soal_id
+                        }
+                    })
+                    if (soal.soal_type == "ganda") {
+                        var jawaban = await Soal.findAll({
+                            where: {
+                                soal_id: soal.id
+                            }
+                        })
+
+                        return res.json({
+                            soal: soal,
+                            jawaban: jawaban
+                        });
+                    } else {
+                        return res.json({
+                            soal: soal
+                        });
+                    }
+                }
+            })
+        })
+        .catch(err => res.status(400).json(err))
+});
+
 
 router.post('/:id', async (req, res) => {
     var Id = req.params.id;
