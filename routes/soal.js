@@ -119,7 +119,7 @@ router.get('/:id', async (req, res) => {
                                 id: fc.soal_id
                             }
                         });
-                        objFc.ganda = await Promise.all(objFc.soal.map(async fc => {
+                        objFc.pilihan = await Promise.all(objFc.soal.map(async fc => {
                             const obj = JSON.parse(JSON.stringify(fc));
                             obj.post = await Opsi_ganda.findAll({
                                 where: {
@@ -128,36 +128,8 @@ router.get('/:id', async (req, res) => {
                             });
                             return obj;
                         }))
-                        // if (objFc.soal.soal_type == "ganda") {
-                        //     var jawaban = await Soal.findAll({
-                        //         where: {
-                        //             soal_id: soal.id
-                        //         }
-                        //     })
-
                         return objFc;
                     }))
-                    // var soal = await Soal.findAll({
-                    //     where: {
-                    //         id: data.soal_id
-                    //     }
-                    // })
-                    // if (soal.soal_type == "ganda") {
-                    //     var jawaban = await Soal.findAll({
-                    //         where: {
-                    //             soal_id: soal.id
-                    //         }
-                    //     })
-
-                    //     return res.json({
-                    //         soal: soal,
-                    //         jawaban: jawaban
-                    //     });
-                    // } else {
-                    //     return res.json({
-                    //         soal: soal
-                    //     });
-                    // }
                     return res.json(soal);
                 }
             })
