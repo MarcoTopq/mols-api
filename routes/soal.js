@@ -112,7 +112,7 @@ router.get('/:id', async (req, res) => {
                         data: "Post not found"
                     });
                 } else {
-                    var soal = await Promise.all(data.map(async fc => {
+                    var data = await Promise.all(data.map(async fc => {
                         const objFc = JSON.parse(JSON.stringify(fc));
                         objFc.soal = await Soal.findAll({
                             where: {
@@ -121,7 +121,7 @@ router.get('/:id', async (req, res) => {
                         });
                         objFc.pilihan = await Promise.all(objFc.soal.map(async fc => {
                             const obj = JSON.parse(JSON.stringify(fc));
-                            obj.post = await Opsi_ganda.findAll({
+                            obj.ganda = await Opsi_ganda.findAll({
                                 where: {
                                     soal_id: fc.id
                                 }
@@ -130,7 +130,7 @@ router.get('/:id', async (req, res) => {
                         }))
                         return objFc;
                     }))
-                    return res.json(soal);
+                    return res.json(data);
                 }
             })
         })
