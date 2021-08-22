@@ -112,7 +112,7 @@ router.get('/:id', async (req, res) => {
                         data: "Post not found"
                     });
                 } else {
-                    var data = await Promise.all(data.map(async fc => {
+                    var datas = await Promise.all(data.map(async fc => {
                         const objFc = JSON.parse(JSON.stringify(fc));
                         objFc.soal = await Soal.findAll({
                             where: {
@@ -130,7 +130,7 @@ router.get('/:id', async (req, res) => {
                         }))
                         return objFc;
                     }))
-                    return res.json(data);
+                    return res.json(datas);
                 }
             })
         })
