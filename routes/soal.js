@@ -4,7 +4,7 @@ var dateFormat = require('dateformat');
 var Soal = require('../models/soal');
 var Joi = require('joi');
 var Post_content = require('../models/post_content');
-
+var Opsi_ganda = require('../models/opsi_ganda');
 var multer = require('multer');
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -102,9 +102,9 @@ router.get('/soalid/:id', async (req, res) => {
 router.get('/:id', async (req, res) => {
     return new Promise(async (resolve, reject) => {
             var Id = req.params.id;
-            await Post_content.findOne({
+            await Post_content.findAll({
                 where: {
-                    id: Id
+                    post_id: Id
                 }
             }).then(async data => {
                 if (!data) {
@@ -112,27 +112,53 @@ router.get('/:id', async (req, res) => {
                         data: "Post not found"
                     });
                 } else {
-                    var soal = await Soal.findOne({
-                        where: {
-                            id: data.soal_id
-                        }
-                    })
-                    if (soal.soal_type == "ganda") {
-                        var jawaban = await Soal.findAll({
+                    var soal = await Promise.all(data.map(async fc => {
+                        const objFc = JSON.parse(JSON.stringify(fc));
+                        objFc.soal = await Soal.findAll({
                             where: {
-                                soal_id: soal.id
+                                id: fc.soal_id
                             }
-                        })
+                        });
+                        objFc.ganda = await Promise.all(objFc.soal.map(async fc => {
+                            const obj = JSON.parse(JSON.stringify(fc));
+                            obj.post = await Opsi_ganda.findAll({
+                                where: {
+                                    soal_id: fc.id
+                                }
+                            });
+                            return obj;
+                        }))
+                        // if (objFc.soal.soal_type == "ganda") {
+                        //     var jawaban = await Soal.findAll({
+                        //         where: {
+                        //             soal_id: soal.id
+                        //         }
+                        //     })
 
-                        return res.json({
-                            soal: soal,
-                            jawaban: jawaban
-                        });
-                    } else {
-                        return res.json({
-                            soal: soal
-                        });
-                    }
+                        return objFc;
+                    }))
+                    // var soal = await Soal.findAll({
+                    //     where: {
+                    //         id: data.soal_id
+                    //     }
+                    // })
+                    // if (soal.soal_type == "ganda") {
+                    //     var jawaban = await Soal.findAll({
+                    //         where: {
+                    //             soal_id: soal.id
+                    //         }
+                    //     })
+
+                    //     return res.json({
+                    //         soal: soal,
+                    //         jawaban: jawaban
+                    //     });
+                    // } else {
+                    //     return res.json({
+                    //         soal: soal
+                    //     });
+                    // }
+                    return res.json(soal);
                 }
             })
         })
