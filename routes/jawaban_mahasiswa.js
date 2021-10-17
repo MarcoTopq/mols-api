@@ -4,6 +4,7 @@ var dateFormat = require('dateformat');
 var Jawaban_mahasiswa = require('../models/jawaban_mahasiswa');
 var Joi = require('joi');
 var multer = require('multer');
+const Post_content = require('../models/post_content');
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, './public/images');
@@ -49,25 +50,35 @@ var updateSchema = {
     }
 };
 
-router.post('/create', async (req, res) => {
+router.post('/create', upload.none(), async (req, res) => {
     return new Promise(async (resolve, reject) => {
-        console.log(req.file)
-        var body = req.body;
-        console.log(req.body);
-        console.log(req.file)
         try {
-            var data = await Jawaban_mahasiswa.create({
-                jawaban: body.jawaban,
-                bobot: body.bobot,
-                user_id: body.user_id,
-                post_content_id: body.post_content_id,
-                status: body.status,
-                access: body.access,
-                type: body.type,
-                created_at: dateFormat(new Date(), "yyyy-mm-dd h:MM:ss"),
-                updated_at: dateFormat(new Date(), "yyyy-mm-dd h:MM:ss")
+            var body = req.body;
+            console.log(req.body);
+
+            var postcontentId = await Post_content.findOne({
+                where: {
+                    post_id: body.post_id,
+                    soal_id: body.soal_id
+                }
             })
-            res.json(data)
+            console.log("postcontentId nyaaaaaaa");
+
+            console.log(postcontentId);
+            if (postcontentId != null) {
+                var data = await Jawaban_mahasiswa.create({
+                    jawaban: body.jawaban,
+                    bobot: body.bobot,
+                    user_id: body.user_id,
+                    post_content_id: postcontentId.id,
+                    status: body.status,
+                    // access: body.access,
+                    type: body.type,
+                    created_at: dateFormat(new Date(), "yyyy-mm-dd h:MM:ss"),
+                    updated_at: dateFormat(new Date(), "yyyy-mm-dd h:MM:ss")
+                })
+                res.json(data)
+            }
         } catch (error) {
             res.json(error)
         }
