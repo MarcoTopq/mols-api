@@ -1,0 +1,10 @@
+tambah:
+- create soal
+- list jawaban 
+- create nilai
+
+- list matkul => list post => create post => create soal => create post content
+
+- list matkul => list post => list mahasiswa => list soal&jawaban
+
+- list matkul => list post => list mahasiswa => create nilai

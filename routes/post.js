@@ -86,13 +86,16 @@ router.post('/create', async (req, res) => {
         console.log(req.file)
         try {
             var post = await Post.create({
-                nama: body.nama,
-                keterangan: body.keterangan,
-                jenis: body.jenis,
-                deadline: body.deadline,
-                id_matkul: body.id_matkul,
-                id_dosen: body.id_dosen,
-                id_file: body.id_file,
+                title: body.title,
+                text: body.text,
+                status: 'active',
+                publish: 'true',
+                date_limit: body.date_limit,
+                minutes: body.minutes,
+                group_id: body.group_id,
+                user_id: body.user_id,
+                post_type: body.post_type,
+                schema_poin_id: body.schema_poin_id,
                 created_at: dateFormat(new Date(), "yyyy-mm-dd h:MM:ss"),
                 updated_at: dateFormat(new Date(), "yyyy-mm-dd h:MM:ss")
             })
@@ -235,14 +238,17 @@ router.post('/:id', async (req, res) => {
                 return res.json("Post not found");
             } else {
                 Post.update({
-                    nama: body.nama,
-                    keterangan: body.keterangan,
-                    jenis: body.jenis,
-                    deadline: body.deadline,
-                    id_matkul: body.id_matkul,
-                    id_dosen: body.id_dosen,
-                    id_file: body.id_file,
-                    update_at: dateFormat(new Date(), "yyyy-mm-dd h:MM:ss")
+                    title: body.title,
+                    text: body.text,
+                    status: 'active',
+                    publish: 'true',
+                    date_limit: body.date_limit,
+                    minutes: body.minutes,
+                    group_id: body.group_id,
+                    user_id: body.user_id,
+                    post_type: body.post_type,
+                    schema_poin_id: body.schema_poin_id,
+                    updated_at: dateFormat(new Date(), "yyyy-mm-dd h:MM:ss")
                 }, {
                     where: {
                         id: Id
