@@ -28,6 +28,8 @@ const Admin = db.define('m_admin', {
   createdAt: Sequelize.DATE,
   updatedAt: Sequelize.DATE,
   isDeleted: Sequelize.TINYINT,
+}, {
+  timestamps: false
 });
 
 Admin.sync();

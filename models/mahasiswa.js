@@ -32,6 +32,9 @@ const Mahasiswa = db.define('mahasiswas', {
   created_at: Sequelize.DATE,
   updated_at: Sequelize.DATE,
   // isDeleted: Sequelize.TINYINT,
+
+}, {
+  timestamps: false
 });
 
 Mahasiswa.sync();

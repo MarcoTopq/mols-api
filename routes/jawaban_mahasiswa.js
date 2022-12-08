@@ -108,6 +108,23 @@ router.get('/:id', async (req, res) => {
         .catch(err => res.status(400).json(err))
 });
 
+router.post('/findbycontent', async (req, res) => {
+    var body = req.body;
+    await Jawaban_mahasiswa.findAll({
+            where: {
+                post_content_id: body.post_content_id
+            }
+        })
+        .then(data => {
+            if (!data) {
+                return res.json("Jawaban_mahasiswa not found");
+            } else {
+                return res.json(data);
+            }
+        })
+        .catch(err => res.status(400).json(err))
+});
+
 router.post('/:id', async (req, res) => {
     var Id = req.params.id;
     var body = req.body;

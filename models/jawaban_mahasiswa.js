@@ -10,20 +10,17 @@ const Grup = db.define('jawaban_mahasiswas', {
     jawaban: {
         type: Sequelize.STRING,
     },
-    bobot  : {
+    bobot: {
         type: Sequelize.INTEGER,
     },
-    user_id : {
+    user_id: {
         type: Sequelize.BIGINT,
     },
-    post_content_id : {
+    post_content_id: {
         type: Sequelize.INTEGER,
     },
     status: {
         type: Sequelize.ENUM('confirmed', 'open', 'close'),
-    },
-    access: {
-        type: Sequelize.ENUM('public', 'private'),
     },
     type: {
         type: Sequelize.STRING,

@@ -20,6 +20,8 @@ const Dosen = db.define('dosens', {
   },
   created_at: Sequelize.DATE,
   updated_at: Sequelize.DATE,
+}, {
+  timestamps: false
 });
 
 Dosen.sync();
